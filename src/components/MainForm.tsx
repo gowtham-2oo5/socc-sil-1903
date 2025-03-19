@@ -116,22 +116,11 @@ const questions: Question[] = [
   {
     id: "problem2",
     type: "leetcode",
-    question: "Count subarrays with given sum",
+    question: "Move Zeroes",
     description:
-      "Given an array of integers and an integer k, find the total number of continuous subarrays whose sum equals to k.",
-    difficulty: "Medium",
-    leetcodeProblem: "https://leetcode.com/problems/subarray-sum-equals-k/",
-    required: true,
-    validation: validateUrl,
-  },
-  {
-    id: "problem3",
-    type: "leetcode",
-    question: "3Sum",
-    description:
-      "Given an array of integers, find all triplets in the array that sum up to a specific target value.",
-    difficulty: "Medium",
-    leetcodeProblem: "https://leetcode.com/problems/3sum/",
+      "Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.",
+    difficulty: "Easy",
+    leetcodeProblem: "https://leetcode.com/problems/move-zeroes/",
     required: true,
     validation: validateUrl,
   },
@@ -186,7 +175,6 @@ export default function TypeformUI() {
       batch: answers.batch || "-",
       q1_link: answers.problem1 || "-",
       q2_link: answers.problem2 || "-",
-      q3_link: answers.problem3 || "-",
       feedback: answers.finalComments || "-",
     };
 
