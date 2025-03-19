@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -109,7 +109,8 @@ const questions: Question[] = [
     description:
       "You are given an array prices where prices[i] is the price of a given stock on the ith day. Find the maximum profit you can achieve.",
     difficulty: "Easy",
-    leetcodeProblem: "Stock Buy and Sell",
+    leetcodeProblem:
+      "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
     required: true,
     validation: validateUrl,
   },
@@ -120,7 +121,7 @@ const questions: Question[] = [
     description:
       "Given an array of integers and an integer k, find the total number of continuous subarrays whose sum equals to k.",
     difficulty: "Medium",
-    leetcodeProblem: "Count subarrays with given sum",
+    leetcodeProblem: "https://leetcode.com/problems/subarray-sum-equals-k/",
     required: true,
     validation: validateUrl,
   },
@@ -131,7 +132,7 @@ const questions: Question[] = [
     description:
       "Given an array of integers, find all triplets in the array that sum up to a specific target value.",
     difficulty: "Medium",
-    leetcodeProblem: "3Sum",
+    leetcodeProblem: "https://leetcode.com/problems/3sum/",
     required: true,
     validation: validateUrl,
   },
@@ -153,6 +154,13 @@ export default function TypeformUI() {
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   const successRef = useRef<HTMLDivElement>(null);
 
+  const [firstTime, setfirstTime] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSubmitted(localStorage.getItem("submitted") === "true");
+    }
+  }, []);
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
@@ -202,6 +210,7 @@ export default function TypeformUI() {
 
       setShowSuccess(true);
       setSubmitted(true);
+      localStorage.setItem("submitted", String(true));
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -419,9 +428,7 @@ export default function TypeformUI() {
                 {currentQuestion.difficulty}
               </span>
               <a
-                href={`https://leetcode.com/problems/${currentQuestion.leetcodeProblem
-                  ?.toLowerCase()
-                  .replace(/\s+/g, "-")}/`}
+                href={`${currentQuestion.leetcodeProblem}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center font-mono"
@@ -630,72 +637,126 @@ export default function TypeformUI() {
 
   return (
     <div className="flex flex-col min-h-[500px] relative font-mono">
-      {/* Progress bar */}
-      <div className="w-full h-1 bg-muted mb-8 rounded-full overflow-hidden">
-        <motion.div
-          className="h-full bg-primary"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.3 }}
-        />
-      </div>
-
-      <div className="flex-grow flex flex-col">
-        <AnimatePresence mode="wait">
+      {firstTime ? (
+        <div className="flex flex-col border rounded-lg border-6 items-center justify-center min-h-[500px] text-center font-mono">
           <motion.div
-            key={currentQuestionIndex}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="flex-grow"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-md w-full"
           >
-            <h2 className="text-2xl font-bold mb-6">
-              {currentQuestion.question}
-            </h2>
-            {renderQuestionInput()}
+            <h2 className="text-3xl font-bold mb-4">Thank you!</h2>
+            <p className="text-muted-foreground mb-8">
+              Your SOCC - Leetcode Live Arrays edition solutions have been
+              submitted successfully.
+            </p>
+
+            <div className="flex flex-col gap-4 mb-8">
+              <h3 className="text-xl font-semibold">
+                Stay Connected with SOCC
+              </h3>
+
+              <a
+                href="https://t.me/socctechclub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+              >
+                <MessageSquare className="h-5 w-5" />
+                Join our Telegram Group (SOCC-KLEF)
+              </a>
+
+              <div className="flex gap-4">
+                <a
+                  href="https://linkedin.com/company/socc-klef"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                >
+                  <Linkedin className="h-5 w-5" />
+                  LinkedIn
+                </a>
+
+                <a
+                  href="https://instagram.com/socc_klef"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 p-3 bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 rounded-lg hover:bg-pink-100 dark:hover:bg-pink-900/40 transition-colors"
+                >
+                  <Instagram className="h-5 w-5" />
+                  Instagram
+                </a>
+              </div>
+            </div>
           </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <div className="flex justify-between mt-8">
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          disabled={currentQuestionIndex === 0}
-          className="flex items-center font-mono"
-        >
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        <div className="text-sm text-muted-foreground font-mono">
-          {currentQuestionIndex + 1} of {questions.length}
         </div>
-        <Button
-          onClick={handleNext}
-          disabled={isSubmitting && canProceed}
-          className="flex items-center font-mono"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Submitting...
-            </>
-          ) : currentQuestionIndex < questions.length - 1 ? (
-            <>
-              Next
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </>
-          ) : (
-            "Submit"
-          )}
-        </Button>
-      </div>
-
-      {/* Required fields note */}
-      <div className="mt-4 text-xs text-muted-foreground">
-        <span className="text-red-500">*</span> indicates required fields
-      </div>
+      ) : (
+        <>
+          {/* Progress bar */}
+          <div className="w-full h-1 bg-muted mb-8 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+          <div className="flex-grow flex flex-col">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentQuestionIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex-grow"
+              >
+                <h2 className="text-2xl font-bold mb-6">
+                  {currentQuestion.question}
+                </h2>
+                {renderQuestionInput()}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className="flex justify-between mt-8">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentQuestionIndex === 0}
+              className="flex items-center font-mono"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+            <div className="text-sm text-muted-foreground font-mono">
+              {currentQuestionIndex + 1} of {questions.length}
+            </div>
+            <Button
+              onClick={handleNext}
+              disabled={isSubmitting || !canProceed}
+              className="flex items-center font-mono"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : currentQuestionIndex < questions.length - 1 ? (
+                <>
+                  Next
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </div>
+          {/* Required fields note */}
+          <div className="mt-4 text-xs text-muted-foreground">
+            <span className="text-red-500">*</span> indicates required fields
+          </div>
+        </>
+      )}
     </div>
   );
 }
