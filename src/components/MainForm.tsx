@@ -174,6 +174,7 @@ export default function TypeformUI() {
 
   // Mock API call
   async function submitForm() {
+    console.log(answers);
     const apiUrl =
       "https://9ojwkihuf2.execute-api.us-east-1.amazonaws.com/prod";
 
@@ -183,9 +184,9 @@ export default function TypeformUI() {
       id: answers.idNumber || "-",
       dept: answers.department || "-",
       batch: answers.batch || "-",
-      q1_link: answers[questions[0]?.id] || "-",
-      q2_link: answers[questions[1]?.id] || "-",
-      q3_link: answers[questions[2]?.id] || "-",
+      q1_link: answers.problem1 || "-",
+      q2_link: answers.problem2 || "-",
+      q3_link: answers.problem3 || "-",
       feedback: answers.finalComments || "-",
     };
 
