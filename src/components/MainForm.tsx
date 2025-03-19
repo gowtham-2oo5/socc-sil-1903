@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
 
 // Define the question types
 type QuestionType =
@@ -211,6 +210,7 @@ export default function TypeformUI() {
       setShowSuccess(true);
       setSubmitted(true);
       localStorage.setItem("submitted", String(true));
+      setfirstTime(true);
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
